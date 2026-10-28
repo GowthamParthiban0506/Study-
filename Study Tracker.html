@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TNPSC · SSC · RRB</title>
+<style>
+:root{--ink:#16323a;--teal:#1f6f78;--teal-d:#17565d;--gold:#e5a823;--bg:#eef3f2;--card:#fff;--line:#d9e3e1;--ok:#2e9e6b;--bad:#c0392b;--muted:#5d7379}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans Tamil','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);padding:18px;line-height:1.5}
+.wrap{max-width:1150px;margin:0 auto}
+input,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff;color:var(--ink)}
+input:focus,textarea:focus,button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+textarea{resize:vertical}button{font:inherit;cursor:pointer}
+.btn{background:var(--teal);color:#fff;border:0;border-radius:6px;padding:10px 14px;font-weight:600;width:100%}
+.btn:hover{background:var(--teal-d)}.btn.ok{background:var(--ok)}.btn.bad{background:var(--bad)}.btn.gold{background:var(--gold);color:var(--ink)}
+.btn.auto{width:auto}
+.row{display:flex;gap:10px}.field{margin-bottom:14px}
+.field label{display:block;font-weight:600;font-size:14px;margin-bottom:5px}
+.screen{display:none}.screen.on{display:block}
+
+/* Home */
+.hero{background:var(--ink);color:#fff;border-radius:12px;padding:56px 28px;text-align:center;margin-bottom:20px}
+.hero h1{font-size:clamp(34px,8vw,64px);font-weight:800;letter-spacing:2px}
+.hero p{color:#b9cfd2;max-width:560px;margin:12px auto 26px}
+.hero .btn{max-width:260px;font-size:17px;padding:13px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.tile{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--gold);border-radius:10px;padding:20px}
+.tile h3{font-size:22px;font-weight:800;margin-bottom:6px}.tile p{font-size:14px;color:var(--muted)}
+
+/* Login */
+#auth{max-width:400px;margin:80px auto;background:var(--card);padding:32px;border-radius:10px;border-top:5px solid var(--gold);box-shadow:0 8px 24px rgba(22,50,58,.12)}
+#auth h1{font-size:30px;font-weight:800;text-align:center;margin-bottom:22px;letter-spacing:1px}
+#err{display:none;background:#fdecea;color:var(--bad);border:1px solid #f3b9b3;border-radius:6px;padding:10px;font-size:13px;font-weight:600;text-align:center;margin-bottom:14px}
+.pw{position:relative}.pw input{padding-right:70px}
+.pw button{position:absolute;right:6px;top:6px;bottom:6px;border:0;background:#e6eeed;color:var(--teal-d);border-radius:4px;padding:0 10px;font-size:12px;font-weight:700}
+.link{background:none;border:0;color:var(--teal);margin-top:14px;width:100%;text-decoration:underline}
+
+/* App */
+header{background:var(--ink);color:#fff;border-radius:10px;padding:22px 24px;margin-bottom:14px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.top h1{font-size:22px}.top p{color:#b9cfd2;font-size:13px}
+.top .row{gap:8px}
+.top button{border-radius:6px;padding:7px 14px;font-size:13px;font-weight:600;border:0}
+#save{background:var(--gold);color:var(--ink)}
+#logout{background:transparent;border:1px solid #6d8c92;color:#fff}
+.bar{background:#2c4a52;border-radius:8px;height:12px;margin:14px 0 6px;overflow:hidden}
+.bar>div{height:100%;width:0;background:var(--gold);transition:width .4s}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:9px 16px;font-weight:600;color:var(--ink)}
+.tab.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.panel{display:none}.panel.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px}
+.card{background:var(--card);border-radius:10px;padding:20px;border:1px solid var(--line)}
+.card h2{font-size:18px;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--bg)}
+.info{background:#fff7e0;border-left:4px solid var(--gold);padding:10px 14px;border-radius:0 6px 6px 0;font-size:14px;margin-bottom:14px}
+.cat{border:1px solid var(--line);border-radius:8px;margin-bottom:10px;overflow:hidden;background:#fff}
+.cat-t{background:var(--bg);padding:9px 14px;font-weight:700;font-size:14px;display:flex;justify-content:space-between}
+.cat-t span{color:var(--muted);font-weight:500}
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.item{padding:7px 14px;border-top:1px solid var(--line);font-size:14px}
+.item label{display:flex;gap:10px;align-items:center;cursor:pointer}.item input{width:auto}
+.item input:checked+span{color:var(--muted);text-decoration:line-through}
+
+/* Targets */
+.t-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg);border-left:4px solid var(--teal);border-radius:0 6px 6px 0;margin-bottom:8px}
+.t-row input{width:auto}.t-row span{flex:1}
+.t-row input:checked+span{color:var(--muted);text-decoration:line-through}
+.x{background:none;border:0;color:var(--bad);font-size:17px}
+.sum{font-size:14px;font-weight:700;margin-bottom:10px;color:var(--teal-d)}
+
+/* Planner */
+.plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:8px 18px}
+.slot{display:grid;grid-template-columns:118px 1fr auto;gap:8px;align-items:center;padding:4px 0}
+.slot b{font-size:13px;color:var(--muted)}
+.slot label{font-size:12px;display:flex;gap:4px;align-items:center;white-space:nowrap}.slot label input{width:auto}
+.slot.study input[type=text]{border-color:var(--teal);background:#eaf6f4}
+
+/* Tracker */
+#time-left{font-family:ui-monospace,Consolas,monospace;font-size:44px;font-weight:700;text-align:center;margin:6px 0 12px}
+.log-list{max-height:170px;overflow-y:auto;margin-top:12px}
+.log{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-left:4px solid var(--teal);background:var(--bg);border-radius:0 6px 6px 0;margin-bottom:6px;font-size:14px}
+.avg{margin-top:8px;font-size:13px;color:var(--muted)}
+.cal-head{display:flex;justify-content:space-between;margin-bottom:10px;font-weight:700;flex-wrap:wrap}
+.cal-head small{color:var(--muted);font-weight:500}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}
+.cal div{padding:9px 0;border-radius:5px;font-size:12px;font-weight:600;background:#e4efed;user-select:none}
+.cal .h{background:none;color:var(--teal)}.cal .b{background:none}.cal .d{cursor:pointer}
+.cal .d.done{background:var(--ok);color:#fff}.cal .d.today{box-shadow:inset 0 0 0 2px var(--gold)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:8px;font-weight:600;display:none;z-index:9}
+@media(max-width:480px){.slot{grid-template-columns:96px 1fr}.slot label{grid-column:2}}
+@media(prefers-reduced-motion:reduce){.bar>div{transition:none}}
+
+/* v2 additions */
+.right{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.clock{text-align:right;line-height:1.25}
+.clock .t{font-family:ui-monospace,Consolas,monospace;font-size:26px;font-weight:700;color:var(--gold)}
+.clock .d{font-size:13px;color:#b9cfd2}
+.today{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:14px;background:#1d4049;border-radius:8px;padding:10px 14px}
+.today b{font-size:22px;color:var(--gold)}.today small{color:#b9cfd2}
+.today .bar{flex:1;min-width:140px;margin:0}.today .bar>div{background:var(--ok)}
+.card .bar.lt{background:var(--bg);margin:0 0 14px}.card .bar.lt>div{background:var(--ok)}
+.plan{display:block}
+.ph{margin:16px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--bg);font-weight:700;font-size:14px;color:var(--teal-d)}
+.slot.now{background:#fff7e0;box-shadow:inset 4px 0 0 var(--gold);border-radius:6px;padding-left:10px}
+.slot.done input[type=text]{text-decoration:line-through;opacity:.7}
+.flags{display:flex;gap:10px}
+@media(max-width:480px){.slot{grid-template-columns:96px 1fr}.flags{grid-column:2}}
+
+select{font:inherit;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);cursor:pointer}
+.ptop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mini{height:5px;background:var(--bg);border-radius:4px;margin-top:6px;overflow:hidden}.mini>div{height:100%;background:var(--ok)}
+.sbar{height:6px;background:var(--bg)}.sbar>div{height:100%;width:0;background:var(--gold);transition:width .3s}
+.cat-t span{color:var(--teal-d);font-weight:700}
+.kural{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:10px;padding:18px 22px;margin-bottom:16px}
+.kural .kh{font-weight:700;color:var(--teal-d);font-size:14px;margin-bottom:8px}
+.kural .kt{font-size:20px;font-weight:700;line-height:1.7}
+.kural .km{font-size:14px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HOME -->
+<div id="home" class="screen on">
+  <div class="hero">
+    <h1>TNPSC · SSC · RRB</h1>
+    <p>மூணு தேர்வுக்கும் syllabus checklist, மாத இலக்கு, 24 மணி நேர படிப்பு அட்டவணை – எல்லாம் ஒரே இடத்தில்.</p>
+    <button class="btn gold auto" id="go-login">Login</button>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<form id="auth" class="screen" autocomplete="off">
+  <h1>TNPSC | SSC | RRB</h1>
+  <div id="err">Username அல்லது Password தவறு. மறுபடி try பண்ணுங்க.</div>
+  <div class="field"><label for="lu">Username</label><input type="text" id="lu" autocapitalize="none" required></div>
+  <div class="field"><label for="lp">Password</label>
+    <div class="pw"><input type="password" id="lp" required><button type="button" id="eye">SHOW</button></div></div>
+  <button type="submit" class="btn">Login</button>
+</form>
+
+<!-- APP -->
+<div id="app" class="screen">
+  <header>
+    <div class="top">
+      <div><h1 id="welcome"></h1><p>இன்னைக்கு படிச்சா நாளைக்கு வெற்றி.</p></div>
+      <div class="right">
+        <div class="clock"><div class="t" id="clk-time">--:--:--</div><div class="d" id="clk-date"></div><div class="d" id="clk-day"></div></div>
+        <div class="row"><button id="save">💾 Save</button><button id="logout">Logout</button></div>
+      </div>
+    </div>
+    <div class="today"><div>📖 இன்னைக்கு படிச்சது<br><b id="st-val">0 மணி</b> <small id="st-sub"></small></div>
+      <div class="bar"><div id="st-bar"></div></div><small>♻️ தினமும் இரவு 12 மணிக்கு reset</small></div>
+    <div class="bar"><div id="pbar"></div></div>
+    <span id="ptext" style="font-weight:700;font-size:14px"></span>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" data-p="p-home">🏠 Home</button>
+    <button class="tab" data-p="p-syl">📚 Syllabus</button>
+    <button class="tab" data-p="p-tgt">🎯 Monthly Target</button>
+    <button class="tab" data-p="p-plan">⏰ Daily Planner</button>
+    <button class="tab" data-p="p-trk">📊 Tracker</button>
+    <button class="tab" data-p="p-gym">💪 Gym</button>
+  </div>
+
+  <!-- Home -->
+  <div class="panel on" id="p-home">
+    <div class="hero"><h1 id="home-h"></h1><p id="home-p"></p></div>
+    <div class="kural"><div class="kh">📜 இன்றைய திருக்குறள் <span id="k-no"></span></div><div class="kt" id="k-text"></div><div class="km" id="k-mean"></div></div>
+    <div class="tiles" id="home-tiles"></div>
+  </div>
+
+  <!-- Syllabus -->
+  <div class="panel" id="p-syl">
+    <div class="tabs" id="exam-tabs"></div>
+    <div class="info" id="exam-info"></div>
+    <div id="syl"></div>
+  </div>
+
+  <!-- Monthly target -->
+  <div class="panel" id="p-tgt">
+    <div class="card">
+      <h2 id="tgt-title">🎯 Monthly Target</h2>
+      <div class="row field"><input type="text" id="tgt-in" placeholder="உதா: இந்த மாசம் Polity முழுசா முடிக்கணும்"><button class="btn auto" id="tgt-add">Add</button></div>
+      <div class="sum" id="tgt-sum"></div>
+      <div id="tgt-list"></div>
+    </div>
+  </div>
+
+  <!-- Planner -->
+  <div class="panel" id="p-plan">
+    <div class="card">
+      <h2>⏰ காலை 4 AM – இரவு 10 PM அட்டவணை</h2>
+      <div class="row field" style="align-items:center;flex-wrap:wrap">
+        <div class="sum" id="plan-sum" style="margin:0;flex:1"></div>
+        <button class="btn auto gold" id="plan-reset">Suggested 12-hour plan</button>
+      </div>
+      <div class="plan" id="plan"></div>
+    </div>
+  </div>
+
+  <!-- Gym -->
+  <div class="panel" id="p-gym">
+    <div class="card">
+      <h2>💪 Gym & Health – இன்னைக்கு</h2>
+      <div class="info">இந்த checklist தினமும் இரவு 12 மணிக்கு தானா reset ஆகும் ♻️ (Study data எதுவும் அழியாது)</div>
+      <div class="sum" id="gym-sum"></div>
+      <div class="bar lt"><div id="gym-bar"></div></div>
+      <div id="gym-list"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2>🧼 Personal Care – இன்னைக்கு</h2>
+      <div class="sum" id="care-sum"></div>
+      <div class="bar lt"><div id="care-bar"></div></div>
+      <div id="care-list"></div>
+    </div>
+  </div>
+
+  <!-- Tracker -->
+  <div class="panel" id="p-trk">
+    <div class="grid">
+      <div class="card"><h2>⏳ Focus Timer (25 நிமிஷம்)</h2>
+        <div id="time-left">25:00</div>
+        <div class="row"><button class="btn ok" id="tbtn">Start</button><button class="btn bad" id="treset">Reset</button></div></div>
+      <div class="card"><h2>📝 Mock Test Marks</h2>
+        <div class="field"><input type="text" id="mn" placeholder="Test பெயர்"></div>
+        <div class="row field"><input type="number" id="ms" placeholder="எடுத்தது" min="0"><input type="number" id="mt" placeholder="மொத்தம்" min="1"></div>
+        <button class="btn" id="madd">Add</button>
+        <div class="log-list" id="logs"></div><div class="avg" id="avg"></div></div>
+      <div class="card"><h2>📅 படிச்ச நாட்கள்</h2>
+        <div class="cal-head"><span id="ctitle"></span><small id="streak"></small></div><div class="cal" id="cal"></div></div>
+      <div class="card"><h2>📓 Notes</h2><textarea id="notes" rows="8" placeholder="Quick notes, formulas, dates..."></textarea></div>
+    </div>
+  </div>
+</div>
+</div>
+<div id="toast"></div>
+
+<script>
+/* ===== USERS: login id / password இங்க மாத்தலாம் ===== */
+const USERS={
+  gowtham:{pass:"gowtham123",name:"Gowtham",exams:["tnpsc","ssc","rrb"]},
+  samya:{pass:"samya123",name:"Samya",exams:["ssc","rrb"]}
+};
+
+/* ===== SYLLABUS ('|' போட்டு topics பிரிக்கப்பட்டிருக்கு) ===== */
+const EX={
+ tnpsc:{label:"TNPSC",info:"Group 4: மொத்தம் 200 கேள்விகள் · 300 மதிப்பெண் · 3 மணி நேரம். Part A General Tamil (100 Q), Part B General Studies (75 Q) + Aptitude & Mental Ability (25 Q). Notification-ல pattern-ஐ confirm பண்ணுங்க.",
+  sec:{
+  "General Tamil":"எழுத்து இலக்கணம்|சொல் & பொருள் இலக்கணம்|யாப்பு & அணி இலக்கணம்|பிழை திருத்தம் & பொருத்துக|சங்க இலக்கியம்|திருக்குறள் & அறநூல்கள்|காப்பியங்கள் & பக்தி இலக்கியம்|நவீன இலக்கியம்|தமிழ் அறிஞர்கள் & நூலாசிரியர்கள்",
+  "General Studies":"History of India & National Movement|Indian Culture & Heritage|Indian Polity & Constitution|Geography (India & Tamil Nadu)|Indian Economy|General Science (Physics, Chemistry, Biology)|Tamil Nadu History, Culture & Social Reforms|Tamil Nadu Administration & Schemes|Current Affairs",
+  "Aptitude & Mental Ability":"Percentage, Profit & Loss|Ratio, Proportion & Average|Simple & Compound Interest|Time & Work, Speed & Distance|LCM, HCF & Number System|Number Series & Coding-Decoding|Logical Reasoning & Puzzles|Data Interpretation"}},
+ ssc:{label:"SSC",info:"CGL / CHSL Tier 1: 100 கேள்விகள் · 200 மதிப்பெண் · 60 நிமிஷம் · தவறான பதிலுக்கு negative marking. Reasoning, Quant, English, GA – ஒவ்வொன்றும் 25 Q. Tier 2 pattern தனி, notification பாருங்க.",
+  sec:{
+  "General Intelligence & Reasoning":"Analogy & Classification|Number & Alphabet Series|Coding-Decoding|Blood Relations|Direction & Distance|Syllogism & Venn Diagram|Order & Ranking|Matrix, Paper Folding & Non-Verbal",
+  "Quantitative Aptitude":"Number System & Simplification|Percentage, Profit & Loss, Discount|Ratio, Average & Mixture|Time-Work, Time-Speed-Distance|SI & CI|Algebra|Geometry & Mensuration|Trigonometry|Data Interpretation",
+  "English Language":"Reading Comprehension|Cloze Test|Error Spotting|Fill in the Blanks|Synonyms & Antonyms|Idioms & Phrases|One Word Substitution|Active-Passive & Narration|Sentence Improvement & Para Jumbles",
+  "General Awareness":"History & Culture|Geography|Indian Polity|Economy|General Science|Static GK (Books, Awards, Sports)|Current Affairs"}},
+ rrb:{label:"RRB",info:"NTPC CBT-1: 100 கேள்விகள் · 90 நிமிஷம் · General Awareness 40, Mathematics 30, Reasoning 30 · தவறுக்கு 1/3 negative. Group D CBT: Science 25, Maths 25, Reasoning 30, GA 20.",
+  sec:{
+  "Mathematics":"Number System & BODMAS|Fractions & Decimals|LCM, HCF|Ratio & Proportion|Percentage|Profit & Loss|Time & Work|Time, Speed & Distance|SI & CI|Algebra|Geometry & Trigonometry|Mensuration|Elementary Statistics",
+  "General Intelligence & Reasoning":"Analogies & Classification|Number & Alphabet Series|Coding-Decoding|Mathematical Operations|Relationships & Directions|Syllogism & Venn Diagram|Data Sufficiency|Statement & Conclusions|Analytical Reasoning|Jumbling",
+  "General Awareness":"Current Affairs|Indian History|Geography|Indian Polity|Indian Economy|Sports, Awards & Culture|Basic Computer Knowledge",
+  "General Science (Group D – 10th level)":"Physics|Chemistry|Biology & Human Body|Environment & Everyday Science"}}
+};
+for(const e of Object.values(EX))for(const k in e.sec)e.sec[k]=e.sec[k].split("|");
+
+/* ===== Suggested 12-hour plan: [routine, study?] ===== */
+const DEF=[["தூக்கம்",0],["தூக்கம்",0],["தூக்கம்",0],["தூக்கம்",0],
+["எழுந்து fresh up & உடற்பயிற்சி",0],["General Tamil",1],["Maths / Aptitude",1],["காலை உணவு & ready",0],["Reasoning",1],["General Studies – History",1],["General Studies – Polity / Geography",1],["Revision & notes",1],
+["மதிய உணவு & ஓய்வு",0],["English",1],["General Awareness / Science",1],["Mock test",1],["Mock test analysis",1],
+["நடை / tea break",0],["Current Affairs",1],["இரவு உணவு",0],["Weak topics revision",1],["நாளை plan & relax",0],
+["தூக்கம்",0],["தூக்கம்",0]];
+
+const $=id=>document.getElementById(id),Q=s=>[...document.querySelectorAll(s)];
+let now,Y,M,TD,MK,DIM;
+function setDate(){now=new Date();Y=now.getFullYear();M=now.getMonth();TD=now.getDate();MK=Y+"-"+(M+1);DIM=new Date(Y,M+1,0).getDate()}
+setDate();
+const dk=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+let user=null,S=null,exam="tnpsc",tid=null,left=1500;
+
+function screen(id){Q(".screen").forEach(s=>s.classList.toggle("on",s.id===id))}
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",1800)}
+function load(){try{return JSON.parse(localStorage.getItem("hub3-"+user))||{}}catch(e){return{}}}
+function save(msg){if(!user)return;try{localStorage.setItem("hub3-"+user,JSON.stringify(S));if(msg)toast("💾 Save ஆச்சு ✓")}catch(e){if(msg)toast("Save ஆகல – browser storage block ஆகியிருக்கு")}}
+
+/* ----- Home / Login ----- */
+$("go-login").onclick=()=>screen("auth");
+$("eye").onclick=()=>{const p=$("lp"),s=p.type==="password";p.type=s?"text":"password";$("eye").textContent=s?"HIDE":"SHOW"};
+$("auth").addEventListener("submit",e=>{
+  e.preventDefault();
+  const u=$("lu").value.trim().toLowerCase(),p=$("lp").value;
+  if(Object.prototype.hasOwnProperty.call(USERS,u)&&USERS[u].pass===p){
+    $("err").style.display="none";user=u;
+    S=Object.assign({notes:"",checks:{},targets:{},plan:DEF.map(x=>({t:x[0],s:x[1]})),logs:[],cal:{},pct:{},daily:{d:"",done:{},gym:{},care:{}},planV:0},load());
+    for(const k in S.checks)if(S.pct[k]==null)S.pct[k]=100;
+    if(S.planV!==3){S.plan=DEF.map(x=>({t:x[0],s:x[1]}));S.planV=3}
+    setDate();ensureToday();save();
+    screen("app");init();
+  }else $("err").style.display="block";
+});
+$("logout").onclick=()=>{save();stopT();left=1500;rT();user=null;S=null;$("lp").value="";screen("home")};
+$("save").onclick=()=>save(true);
+
+/* ----- Tabs ----- */
+function showTab(id){
+  Q(".tab[data-p]").forEach(x=>x.classList.toggle("on",x.dataset.p===id));
+  Q(".panel").forEach(p=>p.classList.toggle("on",p.id===id));
+  if(id==="p-home")renderHome();
+}
+Q(".tab[data-p]").forEach(b=>b.onclick=()=>showTab(b.dataset.p));
+
+const TAG={tnpsc:"Group 4: General Tamil, General Studies, Aptitude.",ssc:"CGL / CHSL: Reasoning, Quant, English, GA.",rrb:"NTPC / Group D: Maths, Reasoning, GA, Science."};
+const pc=id=>S.pct[id]||0;
+function examStat(k){let a=0,d=0,s=0;Object.values(EX[k].sec).forEach((it,si)=>it.forEach((_,i)=>{a++;const v=pc(k+si+"_"+i);s+=v;if(v===100)d++}));return[d,a,Math.round(s/a)]}
+function renderHome(){
+  const U=USERS[user],l=S.targets[MK]||[];
+  $("home-h").textContent="வணக்கம், "+U.name+"!";renderKural();
+  $("home-p").textContent=U.exams.map(k=>EX[k].label).join(" · ")+" | இன்னைக்கு படிச்சது: "+studyNums()[0]+" / "+studyNums()[1]+" மணி · இந்த மாச இலக்கு: "+l.filter(t=>t.d).length+"/"+l.length+" முடிஞ்சது";
+  const box=$("home-tiles");box.innerHTML="";
+  U.exams.forEach(k=>{
+    const[d,a,avg]=examStat(k),t=document.createElement("div");t.className="tile";t.style.cursor="pointer";
+    const h=document.createElement("h3"),p1=document.createElement("p"),p2=document.createElement("p");
+    h.textContent=EX[k].label;p1.textContent=TAG[k];
+    p2.style.cssText="font-weight:700;margin-top:8px;color:#17565d";p2.textContent=avg+"% முடிஞ்சது · "+d+"/"+a+" topics 100%";
+    t.append(h,p1,p2);
+    t.onclick=()=>{exam=k;renderExamTabs();renderSyl();showTab("p-syl")};
+    box.appendChild(t);
+  });
+}
+
+function init(){
+  $("welcome").textContent="வணக்கம், "+USERS[user].name+"!";
+  $("notes").value=S.notes;exam=USERS[user].exams[0];
+  renderExamTabs();renderSyl();renderTgt();renderPlan();renderGym();renderCare();updStudy();renderLogs();buildCal();showTab("p-home");
+}
+
+/* ----- Syllabus ----- */
+function renderExamTabs(){
+  const b=$("exam-tabs");b.innerHTML="";
+  for(const k of USERS[user].exams){
+    const x=document.createElement("button");x.className="tab"+(k===exam?" on":"");x.textContent=EX[k].label;
+    x.onclick=()=>{exam=k;renderExamTabs();renderSyl()};b.appendChild(x);
+  }
+}
+function renderSyl(){
+  const E=EX[exam],box=$("syl");$("exam-info").textContent=E.info;box.innerHTML="";
+  Object.entries(E.sec).forEach(([name,items],si)=>{
+    const w=document.createElement("div");w.className="cat";
+    const t=document.createElement("div");t.className="cat-t";
+    const n=document.createElement("div");n.textContent=name;
+    const c=document.createElement("span");c.id="c-"+exam+si;
+    t.append(n,c);w.appendChild(t);
+    const sb=document.createElement("div"),sf=document.createElement("div");sb.className="sbar";sf.id="sb-"+exam+si;sb.appendChild(sf);w.appendChild(sb);
+    const g=document.createElement("div");g.className="sg";
+    items.forEach((txt,i)=>{
+      const id=exam+si+"_"+i,r=document.createElement("div");r.className="item";
+      const sp=document.createElement("span");sp.textContent=txt;
+      const sel=document.createElement("select");sel.setAttribute("aria-label",txt+" percentage");
+      for(let v=0;v<=100;v+=10){const o=document.createElement("option");o.value=v;o.textContent=v+"%";sel.appendChild(o)}
+      sel.value=pc(id);
+      const bar=document.createElement("div"),f=document.createElement("div");bar.className="mini";f.style.width=pc(id)+"%";bar.appendChild(f);
+      sel.onchange=()=>{const v=+sel.value;v?S.pct[id]=v:delete S.pct[id];f.style.width=v+"%";save();progress()};
+      const top=document.createElement("div");top.className="ptop";top.append(sp,sel);
+      r.append(top,bar);g.appendChild(r);
+    });
+    w.appendChild(g);box.appendChild(w);
+  });
+  progress();
+}
+function progress(){
+  let tot=0,sum=0;
+  for(const k of USERS[user].exams)Object.values(EX[k].sec).forEach((items,si)=>{
+    let s=0;items.forEach((_,i)=>s+=pc(k+si+"_"+i));
+    tot+=items.length;sum+=s;
+    const a=Math.round(s/items.length),c=$("c-"+k+si),b=$("sb-"+k+si);
+    if(c)c.textContent=a+"% முடிஞ்சது";if(b)b.style.width=a+"%";
+  });
+  const p=tot?Math.round(sum/tot):0;
+  $("pbar").style.width=p+"%";$("ptext").textContent="மொத்த Syllabus: "+p+"% முடிந்தது";
+}
+/* ----- Monthly target ----- */
+function renderTgt(){
+  const list=S.targets[MK]||(S.targets[MK]=[]),box=$("tgt-list");box.innerHTML="";
+  $("tgt-title").textContent="🎯 "+now.toLocaleString("en-IN",{month:"long",year:"numeric"})+" இலக்குகள்";
+  list.forEach((t,i)=>{
+    const r=document.createElement("div");r.className="t-row";
+    const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!t.d;
+    cb.onchange=()=>{t.d=cb.checked;save();tSum()};
+    const sp=document.createElement("span");sp.textContent=t.t;
+    const x=document.createElement("button");x.className="x";x.textContent="✕";x.title="நீக்கு";
+    x.onclick=()=>{list.splice(i,1);save();renderTgt()};
+    r.append(cb,sp,x);box.appendChild(r);
+  });
+  tSum();
+}
+function tSum(){
+  const l=S.targets[MK]||[],d=l.filter(t=>t.d).length;
+  $("tgt-sum").textContent=l.length?d+" / "+l.length+" இலக்குகள் முடிஞ்சது":"இன்னும் இலக்கு எதுவும் சேர்க்கல. மேல type பண்ணி Add அழுத்துங்க.";
+}
+function addTgt(){
+  const v=$("tgt-in").value.trim();if(!v)return;
+  (S.targets[MK]||(S.targets[MK]=[])).push({t:v,d:false});
+  $("tgt-in").value="";save();renderTgt();
+}
+$("tgt-add").onclick=addTgt;
+$("tgt-in").addEventListener("keydown",e=>{if(e.key==="Enter")addTgt()});
+
+/* ----- Daily planner ----- */
+function lab(h){const f=n=>{const a=n%24;return((a%12)||12)+" "+(a<12?"AM":"PM")};return f(h)+" – "+f(h+1)}
+function renderPlan(){
+  const box=$("plan");box.innerHTML="";
+  const H={4:"🌅 காலை · 4 AM – 12 PM",12:"☀️ மதியம் · 12 PM – 4 PM",16:"🌆 மாலை · 4 PM – 8 PM",20:"🌙 இரவு · 8 PM – 10 PM"};
+  for(let h=4;h<22;h++){
+    const p=S.plan[h];
+    if(H[h]){const t=document.createElement("div");t.className="ph";t.textContent=H[h];box.appendChild(t)}
+    const r=document.createElement("div");r.className="slot"+(p.s?" study":"")+(p.s&&S.daily.done[h]?" done":"");r.dataset.h=h;
+    const b=document.createElement("b");b.textContent=lab(h);
+    const inp=document.createElement("input");inp.type="text";inp.value=p.t;inp.placeholder="என்ன பண்ணப்போறீங்க?";
+    inp.oninput=()=>{p.t=inp.value;save()};
+    const fl=document.createElement("div");fl.className="flags";
+    const l=document.createElement("label"),c=document.createElement("input");c.type="checkbox";c.checked=!!p.s;l.append(c,"படிப்பு");
+    const l2=document.createElement("label"),dc=document.createElement("input");dc.type="checkbox";dc.checked=!!S.daily.done[h];l2.append(dc,"✔ முடிஞ்சது");
+    l2.style.display=p.s?"":"none";
+    c.onchange=()=>{p.s=c.checked?1:0;if(!p.s){delete S.daily.done[h];dc.checked=false}
+      r.classList.toggle("study",!!p.s);r.classList.toggle("done",!!(p.s&&S.daily.done[h]));l2.style.display=p.s?"":"none";save();pSum();updStudy()};
+    dc.onchange=()=>{dc.checked?S.daily.done[h]=1:delete S.daily.done[h];r.classList.toggle("done",dc.checked);save();pSum();updStudy()};
+    fl.append(l,l2);r.append(b,inp,fl);box.appendChild(r);
+  }
+  pSum();markNow(new Date().getHours());
+}
+function studyNums(){const a=S.plan.slice(4,22);return[a.filter((p,i)=>p.s&&S.daily.done[i+4]).length,a.filter(p=>p.s).length]}
+function pSum(){const[d,n]=studyNums();$("plan-sum").textContent="இன்னைக்கு plan: "+n+" மணி நேர படிப்பு · முடிச்சது: "+d+" மணி"+(n&&d>=n?" ✓":"")}
+function updStudy(){const[d,n]=studyNums();$("st-val").textContent=d+" மணி";$("st-sub").textContent="/ "+n+" மணி plan";$("st-bar").style.width=(n?Math.round(d/n*100):0)+"%"}
+function markNow(hr){Q(".slot").forEach(s=>s.classList.toggle("now",+s.dataset.h===hr))}
+$("plan-reset").onclick=()=>{
+  if(!confirm("உங்க routine அழிஞ்சு suggested plan வரும். சரியா?"))return;
+  S.plan=DEF.map(x=>({t:x[0],s:x[1]}));S.daily.done={};save();renderPlan();updStudy();
+};
+
+/* ----- Timer ----- */
+function rT(){$("time-left").textContent=String(Math.floor(left/60)).padStart(2,"0")+":"+String(left%60).padStart(2,"0")}
+function stopT(){clearInterval(tid);tid=null;$("tbtn").textContent="Start"}
+$("tbtn").onclick=()=>{
+  if(tid){stopT();return}
+  $("tbtn").textContent="Pause";
+  tid=setInterval(()=>{left--;rT();if(left<=0){stopT();left=1500;rT();alert("Session முடிஞ்சது! 5 நிமிஷம் break எடுங்க.")}},1000);
+};
+$("treset").onclick=()=>{stopT();left=1500;rT()};
+
+/* ----- Marks ----- */
+function renderLogs(){
+  const box=$("logs");box.innerHTML="";
+  S.logs.forEach((l,i)=>{
+    const r=document.createElement("div");r.className="log";
+    const n=document.createElement("span");n.textContent=l.name;
+    const b=document.createElement("b");b.textContent=l.score+"/"+l.total+" ("+Math.round(l.score/l.total*100)+"%)";
+    const x=document.createElement("button");x.className="x";x.textContent="✕";
+    x.onclick=()=>{S.logs.splice(i,1);save();renderLogs()};
+    r.append(n,b,x);box.appendChild(r);
+  });
+  $("avg").textContent=S.logs.length?"சராசரி: "+(S.logs.reduce((a,l)=>a+l.score/l.total*100,0)/S.logs.length).toFixed(1)+"% ("+S.logs.length+" tests)":"இன்னும் test எதுவும் add பண்ணல.";
+}
+$("madd").onclick=()=>{
+  const name=$("mn").value.trim(),score=parseFloat($("ms").value),total=parseFloat($("mt").value);
+  if(!name||isNaN(score)||isNaN(total)||total<=0){alert("பெயர், மதிப்பெண், மொத்தம் மூணும் சரியா நிரப்புங்க.");return}
+  S.logs.push({name,score,total});$("mn").value=$("ms").value=$("mt").value="";save();renderLogs();
+};
+
+/* ----- Calendar ----- */
+function buildCal(){
+  const cal=$("cal"),days=S.cal[MK]||(S.cal[MK]=[]);cal.innerHTML="";
+  $("ctitle").textContent=now.toLocaleString("en-IN",{month:"long",year:"numeric"});
+  ["S","M","T","W","T","F","S"].forEach(h=>{const e=document.createElement("div");e.className="h";e.textContent=h;cal.appendChild(e)});
+  for(let i=0;i<new Date(Y,M,1).getDay();i++){const b=document.createElement("div");b.className="b";cal.appendChild(b)}
+  for(let d=1;d<=DIM;d++){
+    const e=document.createElement("div");e.className="d"+(days.includes(d)?" done":"")+(d===TD?" today":"");e.textContent=d;
+    e.onclick=()=>{const i=days.indexOf(d);i>=0?days.splice(i,1):days.push(d);e.classList.toggle("done");streak();save()};
+    cal.appendChild(e);
+  }
+  streak();
+}
+function streak(){
+  const days=S.cal[MK];let s=0,d=days.includes(TD)?TD:TD-1;
+  while(d>=1&&days.includes(d)){s++;d--}
+  $("streak").textContent="🔥 தொடர்ச்சி: "+s+" நாள் | இந்த மாசம்: "+days.length;
+}
+
+$("notes").addEventListener("input",()=>{S.notes=$("notes").value;save()});
+/* ----- Gym (daily reset) ----- */
+const GYM=[["walk","🚶 10,000 steps நடந்தேன்"],["water","💧 3 லிட்டர் தண்ணீர் குடிச்சேன்"],["food","🥗 Healthy food சாப்பிட்டேன்"],["junk","🍔 Junk food தவிர்த்தேன்"],["sugar","🍬 Sugar தவிர்த்தேன்"]];
+function renderGym(){
+  const box=$("gym-list");box.innerHTML="";
+  GYM.forEach(([k,txt])=>{
+    const r=document.createElement("div");r.className="t-row";
+    const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!S.daily.gym[k];
+    cb.onchange=()=>{cb.checked?S.daily.gym[k]=1:delete S.daily.gym[k];save();gSum()};
+    const sp=document.createElement("span");sp.textContent=txt;
+    r.append(cb,sp);box.appendChild(r);
+  });gSum();
+}
+function gSum(){const n=GYM.filter(g=>S.daily.gym[g[0]]).length;
+  $("gym-sum").textContent=n+" / "+GYM.length+" இன்னைக்கு முடிஞ்சது"+(n===GYM.length?" 🔥 சூப்பர்!":"");
+  $("gym-bar").style.width=Math.round(n/GYM.length*100)+"%"}
+
+const CARE=[["b1","🪥 காலை Brush பண்ணேன்"],["bath","🚿 குளிச்சேன்"],["skin","🧴 Face wash & skin care"],["hair","💇 Hair / grooming"],["dress","👕 சுத்தமான உடை"],["b2","🌙 இரவு Brush பண்ணேன்"]];
+function renderCare(){
+  const box=$("care-list");box.innerHTML="";S.daily.care=S.daily.care||{};
+  CARE.forEach(([k,txt])=>{
+    const r=document.createElement("div");r.className="t-row";
+    const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!S.daily.care[k];
+    cb.onchange=()=>{cb.checked?S.daily.care[k]=1:delete S.daily.care[k];save();cSum()};
+    const sp=document.createElement("span");sp.textContent=txt;r.append(cb,sp);box.appendChild(r);
+  });cSum();
+}
+function cSum(){const n=CARE.filter(g=>S.daily.care[g[0]]).length;
+  $("care-sum").textContent=n+" / "+CARE.length+" இன்னைக்கு முடிஞ்சது"+(n===CARE.length?" ✨ சூப்பர்!":"");
+  $("care-bar").style.width=Math.round(n/CARE.length*100)+"%"}
+
+/* ----- Thirukkural (தினமும் ஒன்னு மாறும்) ----- */
+const KURAL=[
+[1,"அகர முதல எழுத்தெல்லாம் ஆதி","பகவன் முதற்றே உலகு.","எழுத்துக்கு 'அ' முதல்; அதுபோல உலகுக்கு இறைவன் முதல்."],
+[2,"கற்றதனால் ஆய பயனென்கொல் வாலறிவன்","நற்றாள் தொழாஅர் எனின்.","இறைவனை வணங்காவிட்டால் கற்ற கல்வியால் என்ன பயன்?"],
+[20,"நீரின்றி அமையாது உலகெனின் யார்யார்க்கும்","வானின்றி அமையாது ஒழுக்கு.","நீர் இல்லாமல் உலகம் இல்லை; மழை இல்லாமல் ஒழுக்கம் இல்லை."],
+[31,"சிறப்பீனுஞ் செல்வமும் ஈனும் அறத்தினூஉங்கு","ஆக்கம் எவனோ உயிர்க்கு.","அறம் சிறப்பையும் செல்வத்தையும் தரும்; அதைவிட நன்மை எது?"],
+[33,"ஒல்லும் வகையான் அறவினை ஓவாதே","செல்லும்வாய் எல்லாஞ் செயல்.","முடிந்த வழியிலெல்லாம் இடைவிடாமல் அறம் செய்க."],
+[34,"மனத்துக்கண் மாசிலன் ஆதல் அனைத்தறன்","ஆகுல நீர பிற.","மனத்தூய்மையே அறம்; மற்றவை ஆரவாரம்."],
+[36,"அன்றறிவாம் என்னாது அறஞ்செய்க மற்றது","பொன்றுங்கால் பொன்றாத் துணை.","பிறகு செய்யலாம் என்னாமல் இப்போதே அறம் செய்; அதுவே இறுதியில் துணை."],
+[38,"வீழ்நாள் படாஅமை நன்றாற்றின் அஃதொருவன்","வாழ்நாள் வழியடைக்குங் கல்.","நாளை வீணாக்காமல் நன்மை செய்; அது வாழ்நாளின் வழியை அடைக்கும் கல்லாகும்."],
+[40,"செயற்பால தோரும் அறனே ஒருவற்கு","உயற்பால தோரும் புகழ்.","செய்யத்தக்கது அறமே; பெறத்தக்கது புகழே."],
+[45,"அன்பும் அறனும் உடைத்தாயின் இல்வாழ்க்கை","பண்பும் பயனும் அது.","அன்பும் அறமும் இருந்தால் வாழ்க்கையே பண்பும் பயனும் ஆகும்."],
+[50,"வையத்துள் வாழ்வாங்கு வாழ்பவன் வானுறையும்","தெய்வத்துள் வைக்கப் படும்.","உலகில் நெறியோடு வாழ்பவன் தெய்வத்துக்கு நிகராக மதிக்கப்படுவான்."],
+[66,"குழலினிது யாழினிது என்பதம் மக்கள்","மழலைச்சொல் கேளா தவர்.","தன் குழந்தையின் மழலை கேட்காதவரே குழலும் யாழும் இனிது என்பர்."],
+[67,"தந்தை மகற்காற்றும் நன்றி அவையத்து","முந்தி இருப்பச் செயல்.","மகனை அவையில் முதன்மையாக்குவதே தந்தை செய்யும் நன்மை."],
+[71,"அன்பிற்கும் உண்டோ அடைக்குந்தாழ் ஆர்வலர்","புன்கண்நீர் பூசல் தரும்.","அன்பை மறைக்க முடியாது; கண்ணீரே காட்டிக்கொடுத்துவிடும்."],
+[100,"இனிய உளவாக இன்னாத கூறல்","கனியிருப்பக் காய்கவர்ந் தற்று.","இனிய சொல் இருக்க கடுஞ்சொல் பேசுவது, கனி இருக்க காய் உண்பது போல."],
+[104,"தினைத்துணை நன்றி செயினும் பனைத்துணையாக்","கொள்வர் பயன்தெரி வார்.","தினையளவு உதவியையும் பனையளவாகப் போற்றுவர் பயன் அறிந்தவர்."],
+[108,"நன்றி மறப்பது நன்றன்று நன்றல்லது","அன்றே மறப்பது நன்று.","உதவியை மறக்கக் கூடாது; தீமையை அன்றே மறப்பது நல்லது."],
+[110,"எந்நன்றி கொன்றார்க்கும் உய்வுண்டாம் உய்வில்லை","செய்ந்நன்றி கொன்ற மகற்கு.","எந்த நன்மையை அழித்தவனும் தப்பலாம்; நன்றி மறந்தவன் தப்ப முடியாது."],
+[121,"அடக்கம் அமரருள் உய்க்கும் அடங்காமை","ஆரிருள் உய்த்து விடும்.","அடக்கம் உயர்வுக்கும், அடங்காமை இருளுக்கும் கொண்டு செல்லும்."],
+[127,"யாகாவா ராயினும் நாகாக்க காவாக்கால்","சோகாப்பர் சொல்லிழுக்குப் பட்டு.","எதைக் காக்காவிட்டாலும் நாவைக் காக்க; இல்லையேல் சொல்லால் துன்பம்."],
+[129,"தீயினாற் சுட்டபுண் உள்ளாறும் ஆறாதே","நாவினாற் சுட்ட வடு.","தீயால் சுட்ட புண் ஆறும்; சொல்லால் சுட்ட வடு ஆறாது."],
+[131,"ஒழுக்கம் விழுப்பந் தரலான் ஒழுக்கம்","உயிரினும் ஓம்பப் படும்.","ஒழுக்கம் சிறப்பைத் தருவதால் உயிரினும் மேலாகக் காக்கப்படும்."],
+[151,"அகழ்வாரைத் தாங்கும் நிலம்போலத் தம்மை","இகழ்வார்ப் பொறுத்தல் தலை.","தோண்டுபவரையும் தாங்கும் நிலம்போல், இகழ்வாரைப் பொறுப்பது சிறந்தது."],
+[211,"கைம்மாறு வேண்டா கடப்பாடு மாரிமாட்டு","என்றாற்றும் கொல்லோ உலகு.","மழை பதில் எதிர்பார்ப்பதில்லை; உதவியும் அப்படியே."],
+[221,"வறியார்க்கொன் றீவதே ஈகைமற் றெல்லாம்","குறியெதிர்ப்பை நீரது உடைத்து.","ஏழைக்குக் கொடுப்பதே உண்மையான ஈகை; மற்றவை பதிலை எதிர்பார்ப்பவை."],
+[314,"இன்னா செய்தாரை ஒறுத்தல் அவர்நாண","நன்னயஞ் செய்து விடல்.","தீமை செய்தவரை, அவர் நாணும்படி நன்மை செய்து தண்டி."],
+[322,"பகுத்துண்டு பல்லுயிர் ஓம்புதல் நூலோர்","தொகுத்தவற்றுள் எல்லாம் தலை.","பகிர்ந்துண்டு உயிர்களைக் காப்பதே அறநூல்களின் தலைசிறந்த அறம்."],
+[391,"கற்க கசடறக் கற்பவை கற்றபின்","நிற்க அதற்குத் தக.","குற்றமில்லாமல் கற்க; கற்றபின் அதன்படி நட."],
+[392,"எண்ணென்ப ஏனை எழுத்தென்ப இவ்விரண்டும்","கண்ணென்ப வாழும் உயிர்க்கு.","எண்ணும் எழுத்தும் மனிதருக்குக் கண்கள் போன்றவை."],
+[396,"தொட்டனைத் தூறும் மணற்கேணி மாந்தர்க்குக்","கற்றனைத் தூறும் அறிவு.","மணல் கேணியில் தோண்டத் தோண்ட நீர்; கற்கக் கற்க அறிவு."],
+[397,"யாதானும் நாடாமால் ஊராமால் என்னொருவன்","சாந்துணையுங் கல்லாத வாறு.","எல்லா ஊரும் நம் ஊரே; சாகும்வரை ஏன் கல்லாமல் இருக்கிறான்?"],
+[398,"ஒருமைக்கண் தான்கற்ற கல்வி ஒருவற்கு","எழுமையும் ஏமாப் புடைத்து.","ஒரு பிறவியில் கற்ற கல்வி ஏழு பிறவிக்கும் துணை நிற்கும்."],
+[400,"கேடில் விழுச்செல்வம் கல்வி யொருவற்கு","மாடல்ல மற்றை யவை.","அழியாத சிறந்த செல்வம் கல்வியே; மற்றவை செல்வம் அல்ல."],
+[411,"செல்வத்துட் செல்வஞ் செவிச்செல்வம் அச்செல்வம்","செல்வத்துள் எல்லாம் தலை.","கேள்வியால் பெறும் அறிவே செல்வங்களில் தலை சிறந்தது."],
+[423,"எப்பொருள் யார்யார்வாய்க் கேட்பினும் அப்பொருள்","மெய்ப்பொருள் காண்பது அறிவு.","யார் சொன்னாலும் அதன் உண்மைப் பொருளை அறிவதே அறிவு."],
+[426,"எவ்வது உறைவது உலகம் உலகத்தோடு","அவ்வது உறைவது அறிவு.","உலகம் செல்லும் வழியோடு இணைந்து வாழ்வதே அறிவு."],
+[595,"வெள்ளத் தனைய மலர்நீட்டம் மாந்தர்தம்","உள்ளத் தனையது உயர்வு.","நீர்மட்டம் அளவே தாமரைத் தண்டு; உள்ளத்தின் அளவே உயர்வு."],
+[616,"முயற்சி திருவினை ஆக்கும் முயற்றின்மை","இன்மை புகுத்தி விடும்.","முயற்சி செல்வம் தரும்; முயலாமை வறுமை தரும்."],
+[619,"தெய்வத்தான் ஆகா தெனினும் முயற்சிதன்","மெய்வருத்தக் கூலி தரும்.","விதியால் முடியாவிட்டாலும், உழைப்புக்கு உரிய பலன் கிடைக்கும்."],
+[620,"ஊழையும் உப்பக்கம் காண்பர் உலைவின்றித்","தாழாது உஞற்று பவர்.","சோர்வின்றி இடைவிடாது முயல்வோர் விதியையும் வெல்வர்."],
+[621,"இடுக்கண் வருங்கால் நகுக அதனை","அடுத்தூர்வது அஃதொப்பது இல்.","துன்பம் வரும்போது சிரி; அதை வெல்ல அதுபோல் வழி இல்லை."],
+[664,"சொல்லுதல் யார்க்கும் எளிய அரியவாம்","சொல்லிய வண்ணம் செயல்.","சொல்வது எளிது; சொன்னபடி செய்வதே அரிது."],
+[666,"எண்ணிய எண்ணியாங் கெய்துப எண்ணியார்","திண்ணிய ராகப் பெறின்.","எண்ணியவர் உறுதியுடன் இருந்தால் எண்ணியதை அடைவர்."],
+[788,"உடுக்கை இழந்தவன் கைபோல ஆங்கே","இடுக்கண் களைவதாம் நட்பு.","உடை நழுவும்போது கை தாங்குவதுபோல், துன்பத்தில் உதவுவதே நட்பு."],
+[972,"பிறப்பொக்கும் எல்லா உயிர்க்கும் சிறப்பொவ்வா","செய்தொழில் வேற்றுமை யான்.","பிறப்பால் எல்லாரும் சமம்; செய்யும் தொழிலால் சிறப்பு வேறுபடும்."],
+[1031,"சுழன்றும் ஏர்ப்பின்னது உலகம் அதனால்","உழந்தும் உழவே தலை.","உலகம் உழவரின் பின்னே சுழல்கிறது; எனவே உழவே தலை."]
+];
+function renderKural(){
+  const d=new Date(),k=KURAL[Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5)%KURAL.length];
+  $("k-no").textContent="(குறள் "+k[0]+")";$("k-text").innerHTML="";
+  $("k-text").append(k[1],document.createElement("br"),k[2]);$("k-mean").textContent="பொருள்: "+k[3];
+}
+
+/* ----- Midnight reset + live clock ----- */
+function ensureToday(){const k=dk(new Date());if(S.daily&&S.daily.d===k)return false;S.daily={d:k,done:{},gym:{},care:{}};return true}
+function tick(){
+  const d=new Date();
+  $("clk-time").textContent=d.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true}).toUpperCase();
+  $("clk-date").textContent=d.toLocaleDateString("en-IN",{day:"numeric",month:"long",year:"numeric"});
+  $("clk-day").textContent=d.toLocaleDateString("en-US",{weekday:"long"});
+  if(!user)return;
+  if(ensureToday()){
+    setDate();save();renderPlan();renderGym();renderCare();updStudy();renderTgt();buildCal();
+    if($("p-home").classList.contains("on"))renderHome();
+    toast("🌅 புது நாள்! Study hours & Gym reset ஆச்சு");
+  }
+  markNow(d.getHours());
+}
+rT();tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
